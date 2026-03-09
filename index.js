@@ -7,7 +7,6 @@ app.use(express.json());
 let listaDeMonitoramento = ['https://pcmg.onrender.com/'];
 const INTERVALO = 30000;
 
-// Função de verificação
 async function verificarSite(url) {
     try {
         await axios.get(url, { timeout: 10000 });
@@ -17,22 +16,20 @@ async function verificarSite(url) {
     }
 }
 
-// Loop de monitoramento
 setInterval(() => {
     listaDeMonitoramento.forEach(verificarSite);
 }, INTERVALO);
 
-// Rota para VOCÊ adicionar sites remotamente
 app.post('/add', (req, res) => {
     const { url } = req.body;
     if (url && url.startsWith('http')) {
         listaDeMonitoramento.push(url);
-        console.log(`\n[+] Novo site adicionado via terminal remoto: ${url}`);
+        console.log(`\n[+] Adicionado remotamente: ${url}`);
         return res.send({ status: 'Sucesso', msg: `Monitorando ${url}` });
     }
     res.status(400).send({ status: 'Erro', msg: 'URL inválida' });
 });
 
-app.listen(3000, () => {
-    console.log("Monitor rodando. Aguardando novos sites na porta 3000...");
+app.listen(3000, '0.0.0.0', () => {
+    console.log("Monitor ativo em mistarts.sytes.net:3000");
 });
